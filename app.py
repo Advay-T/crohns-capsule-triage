@@ -1,4 +1,7 @@
-"""Crohn's capsule triage: Gradio app for Hugging Face Spaces."""
+"""Crohn's capsule triage: a Gradio app that flags likely Crohn's lesions in capsule endoscopy footage.
+
+Run locally with `python app.py`, or in Google Colab with run_in_colab.ipynb.
+"""
 import os, glob, tempfile, zipfile, html, datetime
 import numpy as np, pandas as pd
 import torch, timm, cv2
@@ -725,4 +728,8 @@ with gr.Blocks(title="Crohn's Capsule Triage") as demo:
 
 
 if __name__ == "__main__":
-    demo.queue(max_size=8).launch(theme=theme, css=CSS, js=FORCE_DARK)
+    # In Google Colab, create a temporary public link so the app can be opened in a new tab.
+    in_colab = "COLAB_RELEASE_TAG" in os.environ or "COLAB_GPU" in os.environ
+    share = in_colab or os.environ.get("GRADIO_SHARE", "").lower() in ("1", "true", "yes")
+    print(f"Running on {device}. Loading the app...")
+    demo.queue(max_size=8).launch(theme=theme, css=CSS, js=FORCE_DARK, share=share)
